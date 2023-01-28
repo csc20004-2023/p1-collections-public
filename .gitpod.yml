@@ -1,0 +1,7 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - init: |
+      mvn clean
+      mvn compile javadoc:javadoc -DskipTests=true

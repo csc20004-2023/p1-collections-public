@@ -25,6 +25,9 @@ import java.util.ArrayList;
 public class DataRecordArrayList extends DataRecordCollection {
     private final ArrayList<DataRecord> storage = new ArrayList<>();
 
+    // the position holding the current element to be read
+    private int currentPos;
+
     /** A public constructor, providing a concrete implementation for the one in
      * the abstract superclass.
      * The constructor just builds a buffered reader, and calls the other (non public)
@@ -44,15 +47,12 @@ public class DataRecordArrayList extends DataRecordCollection {
     DataRecordArrayList(BufferedReader r) {
         super(r);
 
-         /* YOUR CODE HERE */
-         /* You may use super.loadDataRecord() from the superclass to read
-            DataRecords from the csv file.
-            You need to store such DataRecords in the 'storage' private field,
-            increasing its size if necessary.
-         */
-
-        // delete the next line
-        throw new UnsupportedOperationException("Not supported yet.");
+        currentPos = 0;
+        DataRecord dr = super.loadDataRecord();
+        if (dr != null) {
+            storage.add(dr);
+            currentPos++;
+        }
     }
 
     /** This method returns the first entry of the collection.
@@ -63,8 +63,12 @@ public class DataRecordArrayList extends DataRecordCollection {
      */
     @Override
     public DataRecord first() {
-        // delete the next line
-        throw new UnsupportedOperationException("Not supported yet.");
+      currentPos = 0;
+      if (storage.isEmpty()) {
+          return null;
+      } else {
+          return storage.get(currentPos++);
+      }
     }
 
     /** This methods returns the next entry of the collection, reading more data
@@ -76,8 +80,19 @@ public class DataRecordArrayList extends DataRecordCollection {
      */
     @Override
     public DataRecord next() {
-        // delete the next line
-        throw new UnsupportedOperationException("Not supported yet.");
+      if (currentPos < storage.size()) {
+          return storage.get(currentPos++);
+      } else {
+          DataRecord dr = super.loadDataRecord();
+
+          if (dr != null) {
+              currentPos++;
+
+              storage.add(dr);
+          }
+
+          return dr;
+      }
     }
 
     /** Checks if we have scanned through the entire collection.
@@ -88,8 +103,18 @@ public class DataRecordArrayList extends DataRecordCollection {
      */
     @Override
     public boolean atEnd() {
-        // delete the next line
-        throw new UnsupportedOperationException("Not supported yet.");
+      // we need to trigger a data load, to check if we have reached the end
+      DataRecord dr = super.loadDataRecord();
+      if (dr != null) {
+          // do NOT update counter, as it is not actually "read"
+          storage.add(dr);
+      }
+
+      if (super.dataAvailable()) {
+          return false;
+      } else {
+          return (currentPos >= storage.size());
+      }
     }
 
    /** This method returns the current number of entries read into the collection
@@ -98,8 +123,7 @@ public class DataRecordArrayList extends DataRecordCollection {
      */
     @Override
     public int size() {
-        // delete the next line
-        throw new UnsupportedOperationException("Not supported yet.");
+      return storage.size();
     }
 
     /** Sorts the entries of the collection according to a criterion specified
@@ -107,8 +131,7 @@ public class DataRecordArrayList extends DataRecordCollection {
      *
      */
     public void sort() {
-        // delete the next line
-        throw new UnsupportedOperationException("Not supported yet.");
+      storage.sort(new DataRecordComparator());
     }
 
 }

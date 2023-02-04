@@ -1,58 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>uk.ac.keele.csc20004</groupId>
-    <artifactId>dynarray</artifactId>
-    <version>1.0</version>
-    <name>dynarray</name>
+  <groupId>uk.ac.keele.csc20004</groupId>
+  <artifactId>dynarray</artifactId>
+  <version>1.0</version>
+  <name>dynarray</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+  </properties>
+
+  <!-- PROFILES -->
+  <profiles>
+    <!-- CODESPACES -->
+    <profile>
+      <id>codespaces</id>
+      <activation>
+        <!-- activate if system properties 'env=gitpod' -->
+        <property>
+          <name>env</name>
+          <value>codespaces</value>
+        </property>
+      </activation>
+      <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-    </properties>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.7.1</version>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.1.0</version>
+            <configuration>
+              <source>${maven.compiler.source}</source>
+              <target>${maven.compiler.source}</target>
+              <doclet>nl.talsmasoftware.umldoclet.UMLDoclet</doclet>
+              <docletArtifact>
+                <groupId>nl.talsmasoftware</groupId>
+                <artifactId>umldoclet</artifactId>
+                <version>2.0.12</version>
+              </docletArtifact>
+              <additionalOptions>
+                <!--<additionalOption>...</additionalOption>-->
+              </additionalOptions>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
 
-    <!-- PROFILES -->
-    <profiles>
-      <!-- GITPOD -->
-      <profile>
-        <id>gitpod</id>
-        <activation>
-          <!-- activate if system properties 'env=gitpod' -->
-          <property>
-            <name>env</name>
-            <value>gitpod</value>
-          </property>
-        </activation>
-        <properties>
-          <java.version>11</java.version>
-          <maven.compiler.source>${java.version}</maven.compiler.source>
-          <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-        </properties>
-        <build>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-javadoc-plugin</artifactId>
-              <version>3.1.0</version>
-              <configuration>
-                <source>${maven.compiler.source}</source>
-                <target>${maven.compiler.source}</target>
-                  <doclet>nl.talsmasoftware.umldoclet.UMLDoclet</doclet>
-                  <docletArtifact>
-                    <groupId>nl.talsmasoftware</groupId>
-                    <artifactId>umldoclet</artifactId>
-                    <version>2.0.12</version>
-                  </docletArtifact>
-                <additionalOptions>
-                  <!--<additionalOption>...</additionalOption>-->
-                </additionalOptions>
-              </configuration>
-              <executions>
+    <!-- HOME -->
+    <profile>
+      <id>home</id>
+      <activation>
+        <!-- activate if system properties 'env=gitpod' -->
+        <property>
+          <name>env</name>
+          <value>home</value>
+        </property>
+      </activation>
+      <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.1</version>
+            <configuration>
+              <source>${java.version}</source>
+              <target>${maven.compiler.source}</target>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.1.0</version>
+            <configuration>
+              <source>${maven.compiler.source}</source>
+              <target>${maven.compiler.source}</target>
+              <additionalOptions>
+                <!--<additionalOption>...</additionalOption>-->
+              </additionalOptions>
+            </configuration>
+            <executions>
                 <execution>
                   <id>attach-javadocs</id>
                   <goals>
@@ -60,125 +113,66 @@
                   </goals>
                 </execution>
               </executions>
-            </plugin>
-          </plugins>
-        </build>
-      </profile>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
 
-      <!-- HOME -->
-      <profile>
-        <id>home</id>
-        <activation>
-          <!-- activate if system properties 'env=gitpod' -->
-          <property>
-            <name>env</name>
-            <value>home</value>
-          </property>
-        </activation>
-        <properties>
-          <java.version>11</java.version>
-          <maven.compiler.source>${java.version}</maven.compiler.source>
-          <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-        </properties>
-        <build>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-javadoc-plugin</artifactId>
-              <version>3.1.0</version>
-              <configuration>
-                <source>${maven.compiler.source}</source>
-                <target>${maven.compiler.source}</target>
-                <additionalOptions>
-                  <!--<additionalOption>...</additionalOption>-->
-                </additionalOptions>
-              </configuration>
-            </plugin>
-          </plugins>
-        </build>
-      </profile>
-
-      <!-- CSL -->
-      <profile>
-        <id>csl</id>
-        <activation>
-          <!-- this profile is active by default -->
-          <activeByDefault>true</activeByDefault>
-          <!-- activate if system properties 'env=netbeans' -->
-          <property>
-            <name>env</name>
-            <value>csl</value>
-          </property>
-        </activation>
-        <properties>
-          <java.version>11</java.version>
-          <maven.compiler.source>${java.version}</maven.compiler.source>
-          <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-        </properties>
-        <build>
-          <plugins>
-            <plugin>
-				    <artifactId>maven-compiler-plugin</artifactId>
-				    <version>3.1</version>
-				    <configuration>
-					    <source>${java.version}</source>
-					    <target>${maven.compiler.source}</target>
-					    <fork>true</fork>
-					    <!--<executable>C:\Program Files\Java\<jdk-17 class="0 2"></jdk-17>\bin\javac</executable>-->
-					    <executable>C:\Program Files\Java\jdk-17.0.2\bin\javac</executable>
-				</configuration>
-			</plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-javadoc-plugin</artifactId>
-              <version>3.1.0</version>
-              <configuration>
-                <source>${maven.compiler.source}</source>
-                <target>${maven.compiler.source}</target>
-                <additionalOptions>
-                  <!--<additionalOption>...</additionalOption>-->
-                </additionalOptions>
-              </configuration>
-              <!--<executions>
+    <!-- CSL -->
+    <profile>
+      <id>csl</id>
+      <activation>
+        <!-- this profile is active by default -->
+        <activeByDefault>true</activeByDefault>
+        <!-- activate if system properties 'env=netbeans' -->
+        <property>
+          <name>env</name>
+          <value>csl</value>
+        </property>
+      </activation>
+      <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.1</version>
+            <configuration>
+              <source>${java.version}</source>
+              <target>${maven.compiler.source}</target>
+              <fork>true</fork>
+              <!--<executable>C:\Program
+              Files\Java\<jdk-17 class="0 2"></jdk-17>\bin\javac</executable>-->
+              <executable>C:\Program Files\Java\jdk-17.0.2\bin\javac</executable>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.1.0</version>
+            <configuration>
+              <source>${maven.compiler.source}</source>
+              <target>${maven.compiler.source}</target>
+              <javadocExecutable>C:\Program Files\Java\jdk-17.0.2\bin\javadoc</javadocExecutable>
+              <additionalOptions>
+                <!--<additionalOption>...</additionalOption>-->
+              </additionalOptions>
+            </configuration>
+            <executions>
                 <execution>
                   <id>attach-javadocs</id>
                   <goals>
                     <goal>jar</goal>
                   </goals>
                 </execution>
-              </executions>-->
-            </plugin>
-          </plugins>
-        </build>
-      </profile>
-    </profiles>
+              </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
-    <build>
-      <defaultGoal>install</defaultGoal>
-
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-help-plugin</artifactId>
-          <version>3.1.0</version>
-          <executions>
-            <execution>
-              <id>show-profiles</id>
-              <phase>compile</phase>
-              <goals>
-                <goal>active-profiles</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.1</version>
-          <configuration>
-            <source>${maven.compiler.source}</source>
-            <target>${maven.compiler.target}</target>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-  </project>
+</project>

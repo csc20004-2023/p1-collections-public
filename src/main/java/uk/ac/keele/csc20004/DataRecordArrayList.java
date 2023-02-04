@@ -125,13 +125,4 @@ public class DataRecordArrayList extends DataRecordCollection {
     public int size() {
       return storage.size();
     }
-
-    /** Sorts the entries of the collection according to a criterion specified
-     * by the class {@link DataRecordComparator}
-     *
-     */
-    public void sort() {
-      storage.sort(new DataRecordComparator());
-    }
-
 }

@@ -102,13 +102,4 @@ public class DataRecordArrayList extends DataRecordCollection {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /** Sorts the entries of the collection according to a criterion specified
-     * by the class {@link DataRecordComparator}
-     *
-     */
-    public void sort() {
-        // delete the next line
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 }
